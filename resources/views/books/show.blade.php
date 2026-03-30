@@ -13,6 +13,10 @@
     <p><strong>ISBN:</strong> {{ $book->isbn }}</p>
     <p><strong>Description:</strong> {{ $book->description }}</p>
     <p><strong>Copies Available:</strong> {{ $book->copies_available }}</p>
+    @if($book->cover_image)
+        <p><strong>Cover:</strong></p>
+        <img src="{{ asset('storage/' . $book->cover_image) }}" width="150">
+    @endif
 
     <a href="{{ route('books.index') }}">Back to list</a>
 </body>

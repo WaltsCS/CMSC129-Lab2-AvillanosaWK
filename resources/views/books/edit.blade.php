@@ -6,7 +6,7 @@
 <body>
     <h1>Edit Book</h1>
 
-    <form action="{{ route('books.update', $book) }}" method="POST">
+    <form action="{{ route('books.update', $book) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         @include('books.form')

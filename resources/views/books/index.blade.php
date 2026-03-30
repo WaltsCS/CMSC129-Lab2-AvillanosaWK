@@ -24,6 +24,7 @@
                 <th>ISBN</th>
                 <th>Copies</th>
                 <th>Actions</th>
+                <th>Cover</th>
             </tr>
         </thead>
         <tbody>
@@ -43,6 +44,11 @@
                             @method('DELETE')
                             <button type="submit" onclick="return confirm('Delete this book?')">Delete</button>
                         </form>
+                    </td>
+                    <td>
+                        @if($book->cover_image)
+                            <img src="{{ asset('storage/' . $book->cover_image) }}" width="80">
+                        @endif
                     </td>
                 </tr>
             @empty

@@ -6,7 +6,7 @@
 <body>
     <h1>Add New Book</h1>
 
-    <form action="{{ route('books.store') }}" method="POST">
+    <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @include('books.form')
     </form>

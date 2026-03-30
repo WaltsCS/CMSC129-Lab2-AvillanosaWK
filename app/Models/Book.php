@@ -12,6 +12,7 @@ class Book extends Model
         'genre',
         'published_year',
         'isbn',
+        'cover_image',
         'description',
         'copies_available',
     ];

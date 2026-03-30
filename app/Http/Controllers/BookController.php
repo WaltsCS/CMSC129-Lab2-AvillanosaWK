@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -35,9 +36,14 @@ class BookController extends Controller
             'genre' => 'required|string|max:255',
             'published_year' => 'required|integer|min:1000|max:9999',
             'isbn' => 'required|string|max:255|unique:books,isbn',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description' => 'nullable|string',
             'copies_available' => 'required|integer|min:0',
         ]);
+
+        if ($request->hasFile('cover_image')) {
+            $validated['cover_image'] = $request->file('cover_image')->store('covers', 'public');
+        }
 
         Book::create($validated);
 
@@ -75,6 +81,16 @@ class BookController extends Controller
             'copies_available' => 'required|integer|min:0',
         ]);
 
+        if ($request->hasFile('cover_image')) {
+
+            // delete old image
+            if ($book->cover_image) {
+                Storage::disk('public')->delete($book->cover_image);
+            }
+
+            $validated['cover_image'] = $request->file('cover_image')->store('covers', 'public');
+        }
+
         $book->update($validated);
 
         return redirect()->route('books.index')->with('success', 'Book updated successfully.');
@@ -85,6 +101,10 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
+        if ($book->cover_image) {
+            Storage::disk('public')->delete($book->cover_image);
+        }
+        
         $book->delete();
 
         return redirect()->route('books.index')->with('success', 'Book deleted successfully.');

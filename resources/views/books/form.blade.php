@@ -40,5 +40,11 @@
     @error('copies_available') <div style="color:red;">{{ $message }}</div> @enderror
 </div>
 
+<div>
+    <label>Cover Image:</label><br>
+    <input type="file" name="cover_image">
+    @error('cover_image') <div style="color:red;">{{ $message }}</div> @enderror
+</div>
+
 <br>
 <button type="submit">Save</button>
