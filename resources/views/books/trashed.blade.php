@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>LibAlexandria - Books</title>
+    <title>Trashed Books</title>
 </head>
 <body>
-    <h1>Books List</h1>
+    <h1>Trashed Books</h1>
 
     @if(session('success'))
         <p style="color: green;">{{ session('success') }}</p>
     @endif
 
-    <a href="{{ route('books.create') }}">Add New Book</a>
-    <a href="{{ route('books.trashed') }}">View Trash</a>
+    <p style="color: darkorange;">These books are in trash. You can restore them or permanently delete them.</p>
+
+    <a href="{{ route('books.index') }}">Back to Active Books</a>
 
     <br><br>
 
@@ -20,10 +21,7 @@
             <tr>
                 <th>Title</th>
                 <th>Author</th>
-                <th>Genre</th>
-                <th>Year</th>
-                <th>ISBN</th>
-                <th>Copies</th>
+                <th>Deleted At</th>
                 <th>Actions</th>
                 <th>Cover</th>
             </tr>
@@ -33,17 +31,20 @@
                 <tr>
                     <td>{{ $book->title }}</td>
                     <td>{{ $book->author }}</td>
-                    <td>{{ $book->genre }}</td>
-                    <td>{{ $book->published_year }}</td>
-                    <td>{{ $book->isbn }}</td>
-                    <td>{{ $book->copies_available }}</td>
+                    <td>{{ $book->deleted_at }}</td>
                     <td>
-                        <a href="{{ route('books.show', $book) }}">View</a> |
-                        <a href="{{ route('books.edit', $book) }}">Edit</a> |
-                        <form action="{{ route('books.destroy', $book) }}" method="POST" style="display:inline;">
+                        <form action="{{ route('books.restore', $book->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit">Restore</button>
+                        </form>
+
+                        <form action="{{ route('books.forceDelete', $book->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" onclick="return confirm('Delete this book?')">Delete</button>
+                            <button type="submit" onclick="return confirm('Permanently delete this book? This cannot be undone.')">
+                                Delete Permanently
+                            </button>
                         </form>
                     </td>
                     <td>
@@ -54,7 +55,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7">No books found.</td>
+                    <td colspan="5">Trash is empty.</td>
                 </tr>
             @endforelse
         </tbody>

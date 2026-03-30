@@ -99,14 +99,41 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    // soft delete
     public function destroy(Book $book)
     {
+        $book->delete();
+
+        return redirect()->route('books.index')->with('success', 'Book moved to trash successfully.');
+    }
+
+    // show trashed books
+    public function trashed()
+    {
+        $books = Book::onlyTrashed()->latest()->get();
+        return view('books.trashed', compact('books'));
+    }
+
+    // restore trashed book
+    public function restore($id)
+    {
+        $book = Book::onlyTrashed()->findOrFail($id);
+        $book->restore();
+
+        return redirect()->route('books.trashed')->with('success', 'Book restored successfully.');
+    }
+
+    // permanently delete book
+    public function forceDelete($id)
+    {
+        $book = Book::onlyTrashed()->findOrFail($id);
+
         if ($book->cover_image) {
             Storage::disk('public')->delete($book->cover_image);
         }
-        
-        $book->delete();
 
-        return redirect()->route('books.index')->with('success', 'Book deleted successfully.');
+        $book->forceDelete();
+
+        return redirect()->route('books.trashed')->with('success', 'Book permanently deleted successfully.');
     }
 }
