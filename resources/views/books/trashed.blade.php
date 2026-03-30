@@ -41,10 +41,19 @@
                                 <button type="submit" class="success">Restore</button>
                             </form>
 
-                            <form action="{{ route('books.forceDelete', $book->id) }}" method="POST">
+                            <form id="force-delete-form-{{ $book->id }}" action="{{ route('books.forceDelete', $book->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="danger" onclick="return confirm('Permanently delete this book? This cannot be undone.')">
+                                <button
+                                    type="button"
+                                    class="danger"
+                                    onclick="openConfirmModal(
+                                        'force-delete-form-{{ $book->id }}',
+                                        'Delete Book Permanently',
+                                        'Are you sure you want to permanently delete &quot;{{ addslashes($book->title) }}&quot;? This cannot be undone.',
+                                        'Delete Permanently'
+                                    )"
+                                >
                                     Delete Permanently
                                 </button>
                             </form>

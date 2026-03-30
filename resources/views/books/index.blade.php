@@ -41,10 +41,21 @@
                             <a href="{{ route('books.show', $book) }}" class="btn">View</a>
                             <a href="{{ route('books.edit', $book) }}" class="btn secondary">Edit</a>
 
-                            <form action="{{ route('books.destroy', $book) }}" method="POST">
+                            <form id="trash-form-{{ $book->id }}" action="{{ route('books.destroy', $book) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="warning" onclick="return confirm('Move this book to trash?')">Trash</button>
+                                <button
+                                    type="button"
+                                    class="warning"
+                                    onclick="openConfirmModal(
+                                        'trash-form-{{ $book->id }}',
+                                        'Move Book to Trash',
+                                        'Are you sure you want to move &quot;{{ addslashes($book->title) }}&quot; to trash?',
+                                        'Move to Trash'
+                                    )"
+                                >
+                                    Trash
+                                </button>
                             </form>
                         </div>
                     </td>

@@ -174,8 +174,90 @@
         .muted {
             color: #666;
         }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .modal-box {
+            background: #fff;
+            width: 90%;
+            max-width: 420px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 24px;
+        }
+
+        .modal-box h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: #1f3b73;
+        }
+
+        .modal-box p {
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modal-actions button {
+            margin: 0;
+        }
     </style>
 </head>
+<div id="confirmModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3 id="confirmTitle">Confirm Action</h3>
+        <p id="confirmMessage">Are you sure you want to continue?</p>
+
+        <div class="modal-actions">
+            <button type="button" class="btn secondary" onclick="closeConfirmModal()">Cancel</button>
+            <button type="button" class="btn danger" id="confirmActionBtn">Confirm</button>
+        </div>
+    </div>
+</div>
+<script>
+    let currentFormToSubmit = null;
+
+    function openConfirmModal(formId, title, message, buttonText = 'Confirm') {
+        currentFormToSubmit = document.getElementById(formId);
+
+        document.getElementById('confirmTitle').textContent = title;
+        document.getElementById('confirmMessage').textContent = message;
+        document.getElementById('confirmActionBtn').textContent = buttonText;
+
+        document.getElementById('confirmModal').style.display = 'flex';
+    }
+
+    function closeConfirmModal() {
+        currentFormToSubmit = null;
+        document.getElementById('confirmModal').style.display = 'none';
+    }
+
+    document.getElementById('confirmActionBtn').addEventListener('click', function () {
+        if (currentFormToSubmit) {
+            currentFormToSubmit.submit();
+        }
+    });
+
+    window.addEventListener('click', function (e) {
+        const modal = document.getElementById('confirmModal');
+        if (e.target === modal) {
+            closeConfirmModal();
+        }
+    });
+</script>
 <body>
     <div class="container">
         @yield('content')
