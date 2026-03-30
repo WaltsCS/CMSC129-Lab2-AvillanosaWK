@@ -1,21 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>LibAlexandria - Books</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'LibAlexandria - Books')
+
+@section('content')
     <h1>Books List</h1>
 
     @if(session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
+        <div class="alert-success">{{ session('success') }}</div>
     @endif
 
-    <a href="{{ route('books.create') }}">Add New Book</a>
-    <a href="{{ route('books.trashed') }}">View Trash</a>
+    <div class="top-links">
+        <a href="{{ route('books.create') }}">Add New Book</a>
+        <a href="{{ route('books.trashed') }}" class="secondary">View Trash</a>
+    </div>
 
-    <br><br>
-
-    <table border="1" cellpadding="10">
+    <table>
         <thead>
             <tr>
                 <th>Title</th>
@@ -38,26 +37,30 @@
                     <td>{{ $book->isbn }}</td>
                     <td>{{ $book->copies_available }}</td>
                     <td>
-                        <a href="{{ route('books.show', $book) }}">View</a> |
-                        <a href="{{ route('books.edit', $book) }}">Edit</a> |
-                        <form action="{{ route('books.destroy', $book) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" onclick="return confirm('Delete this book?')">Delete</button>
-                        </form>
+                        <div class="actions-inline">
+                            <a href="{{ route('books.show', $book) }}" class="btn">View</a>
+                            <a href="{{ route('books.edit', $book) }}" class="btn secondary">Edit</a>
+
+                            <form action="{{ route('books.destroy', $book) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="warning" onclick="return confirm('Move this book to trash?')">Trash</button>
+                            </form>
+                        </div>
                     </td>
                     <td>
                         @if($book->cover_image)
-                            <img src="{{ asset('storage/' . $book->cover_image) }}" width="80">
+                            <img src="{{ asset('storage/' . $book->cover_image) }}" alt="Book Cover" class="cover-thumb">
+                        @else
+                            <span class="muted">No cover</span>
                         @endif
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7">No books found.</td>
+                    <td colspan="8">No books found.</td>
                 </tr>
             @endforelse
         </tbody>
     </table>
-</body>
-</html>
+@endsection

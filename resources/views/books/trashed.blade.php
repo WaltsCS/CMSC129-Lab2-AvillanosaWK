@@ -1,22 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Trashed Books</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Trashed Books')
+
+@section('content')
     <h1>Trashed Books</h1>
 
     @if(session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
+        <div class="alert-success">{{ session('success') }}</div>
     @endif
 
-    <p style="color: darkorange;">These books are in trash. You can restore them or permanently delete them.</p>
+    <div class="alert-warning">
+        These books are in trash. You can restore them or permanently delete them.
+    </div>
 
-    <a href="{{ route('books.index') }}">Back to Active Books</a>
+    <div class="top-links">
+        <a href="{{ route('books.index') }}" class="secondary">Back to Active Books</a>
+    </div>
 
-    <br><br>
-
-    <table border="1" cellpadding="10">
+    <table>
         <thead>
             <tr>
                 <th>Title</th>
@@ -33,23 +34,27 @@
                     <td>{{ $book->author }}</td>
                     <td>{{ $book->deleted_at }}</td>
                     <td>
-                        <form action="{{ route('books.restore', $book->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('PATCH')
-                            <button type="submit">Restore</button>
-                        </form>
+                        <div class="actions-inline">
+                            <form action="{{ route('books.restore', $book->id) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="success">Restore</button>
+                            </form>
 
-                        <form action="{{ route('books.forceDelete', $book->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" onclick="return confirm('Permanently delete this book? This cannot be undone.')">
-                                Delete Permanently
-                            </button>
-                        </form>
+                            <form action="{{ route('books.forceDelete', $book->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="danger" onclick="return confirm('Permanently delete this book? This cannot be undone.')">
+                                    Delete Permanently
+                                </button>
+                            </form>
+                        </div>
                     </td>
                     <td>
                         @if($book->cover_image)
-                            <img src="{{ asset('storage/' . $book->cover_image) }}" width="80">
+                            <img src="{{ asset('storage/' . $book->cover_image) }}" alt="Book Cover" class="cover-thumb">
+                        @else
+                            <span class="muted">No cover</span>
                         @endif
                     </td>
                 </tr>
@@ -60,5 +65,4 @@
             @endforelse
         </tbody>
     </table>
-</body>
-</html>
+@endsection
