@@ -1,58 +1,173 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📚 LibAlexandria - Book Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A simple Laravel-based Book Management System that allows users to manage a collection of books with full CRUD functionality, file uploads, and soft delete features.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### ✅ Core Features
+- Create, Read, Update, Delete (CRUD) books
+- View detailed book information
+- Upload and display book cover images
+- Clean and responsive UI
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### ⭐ Expanded Features (for higher grade)
 
-## Learning Laravel
+#### 1. Soft Delete with Restore
+- Books are not immediately deleted
+- Moved to **Trash**
+- Can be:
+  - ♻️ Restored
+  - ❌ Permanently deleted
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+#### 2. File Upload with Storage Management
+- Upload cover images for books
+- Stored using Laravel file storage
+- Displayed in both active and trashed views
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### 3. Database Seeding with Faker
+- Automatically generate sample books
+- Uses Laravel Factory + Seeder
+- Helps test UI and features quickly
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## 🖼️ UI Features
+- Modern card-based layout
+- Styled tables and buttons
+- Custom modal confirmations (no browser alerts)
+- Responsive and centered layout
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
 
+## 🛠️ Tech Stack
+
+- **Framework:** Laravel 13
+- **Language:** PHP 8.4
+- **Database:** PostgreSQL
+- **Frontend:** Blade + CSS
+- **Tools:** Composer, Artisan CLI
+
+---
+
+## ⚙️ Installation Guide
+
+### 1. Clone the repository
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+cd YOUR_REPO_NAME
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Install dependencies
+```bash
+composer install
+```
+### 3. Setup environment
+- cp, .env.example, .env
+```
+php artisan key:generate
+```
+### 4. Configure database
 
-## Contributing
+#### Update .env:
+```
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=LibAlexandria
+DB_USERNAME=postgres
+DB_PASSWORD=your_password
+### 5. Run migrations
+php artisan migrate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 6. Seed database (optional but recommended)
+```
+php artisan db:seed --class=BookSeeder
+```
+### 7. Run the server
+```
+php artisan serve
+```
 
-## Code of Conduct
+- Open in browser:
+```
+http://127.0.0.1:8000/books
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 📂 Project Structure (Important Files)
 
-## Security Vulnerabilities
+```
+app/
+ └── Models/
+      └── Book.php
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+app/Http/Controllers/
+ └── BookController.php
 
-## License
+database/
+ ├── factories/
+ │    └── BookFactory.php
+ └── seeders/
+      └── BookSeeder.php
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+resources/views/
+ ├── layouts/
+ │    └── app.blade.php
+ └── books/
+      ├── index.blade.php
+      ├── create.blade.php
+      ├── edit.blade.php
+      ├── show.blade.php
+      ├── trashed.blade.php
+      └── form.blade.php
+
+routes/
+ └── web.php
+```
+
+## 🔄 System Flow
+### 📘 Book Management
+
+```
+Add → Edit → View → Delete (soft delete)
+```
+
+### 🗑️ Trash System
+- Deleted books go to Trash
+- Options:
+1. Restore book
+2. Permanently delete
+
+### 🧪 Testing Features
+
+You can test:
+
+- Adding books with/without cover
+- Editing book details
+- Soft deleting books
+- Restoring from Trash
+- Permanent deletion
+- Faker-generated data
+
+---
+
+## 📌 Notes
+- Soft deletes use Laravel’s built-in SoftDeletes
+- File uploads stored in storage/app/public
+- Run this if images don’t show:
+```
+php artisan storage:link
+```
+
+
+---
+
+## 👨‍💻 Author
+
+Avillanosa, WK
+CMSC129 – Laboratory 2
+
+---
+
